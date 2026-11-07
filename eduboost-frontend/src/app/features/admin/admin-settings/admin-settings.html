@@ -1,0 +1,194 @@
+<!-- ══ TOAST ══ -->
+<div class="as-toast" *ngIf="toast" [class]="'as-toast--'+toastType">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15">
+    <polyline *ngIf="toastType==='success'" points="20 6 9 17 4 12"/>
+    <ng-container *ngIf="toastType==='danger'"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></ng-container>
+  </svg>
+  {{ toast }}
+</div>
+
+<!-- ══ PAGE ══ -->
+<div class="as-page">
+
+  <!-- ── COMMAND CENTER HEADER ── -->
+  <div class="as-header">
+    <div class="as-hdr-grid"></div>
+    <div class="as-hdr-glow1"></div>
+    <div class="as-hdr-glow2"></div>
+    <div class="as-hdr-content">
+      <div class="as-hdr-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="as-hdr-chip">
+          <span class="as-chip-dot"></span>
+          System Administration
+        </div>
+        <h1 class="as-hdr-title">Settings</h1>
+        <p class="as-hdr-sub">Configure platform behaviour and security</p>
+      </div>
+    </div>
+    <!-- Sidebar nav -->
+    <div class="as-hdr-nav">
+      <button *ngFor="let s of sections" class="as-nav-item"
+              [class.as-nav--active]="activeSection===s.key"
+              (click)="activeSection=s.key">
+        <span class="as-nav-dot" [class.as-dot--active]="activeSection===s.key"></span>
+        {{ s.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- ── CONTENT ── -->
+  <div class="as-body">
+
+    <!-- LEFT: section panel -->
+    <div class="as-panel as-panel--anim">
+
+      <!-- PLATFORM -->
+      <ng-container *ngIf="activeSection==='platform'">
+        <div class="as-panel-head">
+          <div class="as-panel-ico as-ic--blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+          <div><h3>Platform Settings</h3><p>Global configuration for all users</p></div>
+        </div>
+        <div class="as-toggles">
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">Maintenance Mode</div><div class="as-tgl-sub">Temporarily disable access for all users</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="platform.maintenance"/><span class="as-slider"></span></label></div>
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">Allow Registrations</div><div class="as-tgl-sub">Enable new user sign-ups</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="platform.allowRegistrations"/><span class="as-slider"></span></label></div>
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">Email Verification</div><div class="as-tgl-sub">Require email verification for new accounts</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="platform.emailVerification"/><span class="as-slider"></span></label></div>
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">Two-Factor Auth</div><div class="as-tgl-sub">Enforce 2FA for all admin accounts</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="platform.twoFactor"/><span class="as-slider"></span></label></div>
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">Analytics Tracking</div><div class="as-tgl-sub">Collect anonymous usage analytics</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="platform.analytics"/><span class="as-slider"></span></label></div>
+        </div>
+        <div class="as-foot"><button class="as-btn as-btn--accent" (click)="savePlatform()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg>Save Platform Settings</button></div>
+      </ng-container>
+
+      <!-- NOTIFICATIONS -->
+      <ng-container *ngIf="activeSection==='notifications'">
+        <div class="as-panel-head">
+          <div class="as-panel-ico as-ic--purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div><h3>Notification Settings</h3><p>Configure system-wide alerts</p></div>
+        </div>
+        <div class="as-toggles">
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">System Alerts</div><div class="as-tgl-sub">Get alerts for critical system events</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="notifs.systemAlerts"/><span class="as-slider"></span></label></div>
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">New User Alerts</div><div class="as-tgl-sub">Notify on each new registration</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="notifs.newUsers"/><span class="as-slider"></span></label></div>
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">Course Updates</div><div class="as-tgl-sub">Alert when courses are modified or added</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="notifs.courseUpdates"/><span class="as-slider"></span></label></div>
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">Weekly Reports</div><div class="as-tgl-sub">Receive weekly platform summary emails</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="notifs.weeklyReports"/><span class="as-slider"></span></label></div>
+        </div>
+        <div class="as-foot"><button class="as-btn as-btn--accent" (click)="saveNotifs()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg>Save Notifications</button></div>
+      </ng-container>
+
+      <!-- APPEARANCE -->
+      <ng-container *ngIf="activeSection==='appearance'">
+        <div class="as-panel-head">
+          <div class="as-panel-ico as-ic--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/></svg></div>
+          <div><h3>Appearance</h3><p>Customize the admin interface</p></div>
+        </div>
+        <div class="as-app-grid">
+          <div class="as-app-card">
+            <label class="as-app-label">Language</label>
+            <select [(ngModel)]="appearance.language" class="as-select">
+              <option>English</option><option>French</option><option>Arabic</option>
+            </select>
+          </div>
+          <div class="as-app-card">
+            <label class="as-app-label">Theme</label>
+            <select [(ngModel)]="appearance.theme" class="as-select">
+              <option value="dark">Dark</option><option value="light">Light</option>
+            </select>
+          </div>
+          <div class="as-app-card">
+            <label class="as-app-label">Dashboard Layout</label>
+            <select [(ngModel)]="appearance.layout" class="as-select">
+              <option value="cards">Cards</option><option value="table">Table</option><option value="compact">Compact</option>
+            </select>
+          </div>
+          <div class="as-app-card">
+            <label class="as-app-label">Rows Per Page</label>
+            <select [(ngModel)]="appearance.rowsPerPage" class="as-select">
+              <option>10</option><option>20</option><option>50</option><option>100</option>
+            </select>
+          </div>
+        </div>
+        <div class="as-foot"><button class="as-btn as-btn--accent" (click)="saveAppearance()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg>Save Appearance</button></div>
+      </ng-container>
+
+      <!-- SECURITY -->
+      <ng-container *ngIf="activeSection==='security'">
+        <div class="as-panel-head">
+          <div class="as-panel-ico as-ic--amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          <div><h3>Security Settings</h3><p>Protect the platform and user accounts</p></div>
+        </div>
+        <div class="as-toggles">
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">Force HTTPS</div><div class="as-tgl-sub">Redirect all HTTP requests to HTTPS</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="security.forceHttps"/><span class="as-slider"></span></label></div>
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">Session Timeout</div><div class="as-tgl-sub">Auto-logout after 30 minutes of inactivity</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="security.sessionTimeout"/><span class="as-slider"></span></label></div>
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">IP Rate Limiting</div><div class="as-tgl-sub">Limit login attempts per IP address</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="security.rateLimiting"/><span class="as-slider"></span></label></div>
+          <div class="as-tgl-row"><div class="as-tgl-info"><div class="as-tgl-lbl">Audit Logging</div><div class="as-tgl-sub">Log all admin actions for compliance</div></div>
+            <label class="as-switch"><input type="checkbox" [(ngModel)]="security.auditLog"/><span class="as-slider"></span></label></div>
+        </div>
+        <div class="as-foot"><button class="as-btn as-btn--accent" (click)="saveSecurity()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg>Save Security</button></div>
+      </ng-container>
+
+    </div>
+
+    <!-- RIGHT: quick status sidebar -->
+    <div class="as-status-panel">
+      <div class="as-sp-head">System Status</div>
+      <div class="as-sp-items">
+        <div class="as-sp-item">
+          <div class="as-sp-label">Platform</div>
+          <span class="as-badge as-badge--green">● Online</span>
+        </div>
+        <div class="as-sp-item">
+          <div class="as-sp-label">Registrations</div>
+          <span class="as-badge" [class.as-badge--green]="platform.allowRegistrations" [class.as-badge--red]="!platform.allowRegistrations">
+            {{ platform.allowRegistrations ? '● Open' : '● Closed' }}
+          </span>
+        </div>
+        <div class="as-sp-item">
+          <div class="as-sp-label">Maintenance</div>
+          <span class="as-badge" [class.as-badge--amber]="platform.maintenance" [class.as-badge--grey]="!platform.maintenance">
+            {{ platform.maintenance ? '● Active' : '○ Off' }}
+          </span>
+        </div>
+        <div class="as-sp-item">
+          <div class="as-sp-label">2FA</div>
+          <span class="as-badge" [class.as-badge--green]="platform.twoFactor" [class.as-badge--grey]="!platform.twoFactor">
+            {{ platform.twoFactor ? '● Enabled' : '○ Disabled' }}
+          </span>
+        </div>
+        <div class="as-sp-sep"></div>
+        <div class="as-sp-item">
+          <div class="as-sp-label">API Version</div>
+          <span class="as-sp-val">v2.4.1</span>
+        </div>
+        <div class="as-sp-item">
+          <div class="as-sp-label">Uptime</div>
+          <span class="as-sp-val">98.7%</span>
+        </div>
+        <div class="as-sp-item">
+          <div class="as-sp-label">Last Backup</div>
+          <span class="as-sp-val">2h ago</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

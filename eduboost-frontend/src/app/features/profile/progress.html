@@ -1,0 +1,10 @@
+<div class="container mt-4" *ngIf="user">
+  <h3>{{user.name}} - Progress</h3>
+  <div *ngFor="let p of progress" class="card p-3 mb-2">
+    <h5>{{p.course}}</h5>
+    <p>Progress: {{p.stats.progress}}% ({{p.stats.attempts}} attempts)</p>
+    <p>Risk: <strong>{{p.risk}}</strong></p>
+    <p>Recommendation: {{p.rec}}</p>
+  </div>
+</div>
+<div *ngIf="!user" class="container mt-4">Please login to see progress</div>

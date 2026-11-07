@@ -1,0 +1,77 @@
+<div class="sc-toast" *ngIf="toast" [ngClass]="'toast-'+toastType">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  {{ toast }}
+</div>
+
+<div class="sc-page">
+
+  <!-- Toolbar -->
+  <div class="sc-toolbar">
+    <div class="sc-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input [(ngModel)]="search" (ngModelChange)="applyFilter()" placeholder="Search my courses..." />
+    </div>
+    <div class="sc-filters">
+      <button *ngFor="let l of levels" class="sc-filter-btn" [class.active]="filterLevel===l"
+        (click)="filterLevel=l; applyFilter()">{{ l==='all' ? 'All Levels' : l }}</button>
+    </div>
+    <div class="sc-count">{{ filtered.length }} course{{ filtered.length!==1?'s':'' }}</div>
+  </div>
+
+  <!-- Grid -->
+  <div class="sc-grid">
+    <div *ngFor="let c of filtered; let i=index" class="sc-card" [style.animation-delay]="(i*60)+'ms'">
+      <!-- Thumb -->
+      <div class="sc-thumb" [style.background-image]="'url('+c.image+')'">
+        <div class="sc-thumb-overlay"></div>
+        <span class="sc-level" [ngClass]="getLevelClass(c.difficulty)">{{ c.difficulty || 'Beginner' }}</span>
+        <span class="sc-status" [ngClass]="getStatusClass(c.progress)">{{ getStatusLabel(c.progress) }}</span>
+      </div>
+      <!-- Body -->
+      <div class="sc-body">
+        <div class="sc-cat">{{ c.category }}</div>
+        <h3 class="sc-title">{{ c.title }}</h3>
+        <p class="sc-desc">{{ c.description }}</p>
+        <div class="sc-meta">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            {{ c.chapters?.length || 0 }} chapters
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {{ c.duration }}
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/></svg>
+            {{ c.quizzes?.length || 0 }} quizzes
+          </span>
+        </div>
+        <!-- Progress -->
+        <div class="sc-prog-wrap">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span class="sc-prog-lbl">Progress</span>
+            <span class="sc-prog-pct">{{ c.progress }}%</span>
+          </div>
+          <div class="s-prog-bar">
+            <div class="s-prog-fill" [style.width]="c.progress+'%'" [style.background]="c.progress===100?'linear-gradient(135deg,#059669,#10b981)':undefined"></div>
+          </div>
+        </div>
+        <!-- Actions -->
+        <div class="sc-actions">
+          <button class="s-btn s-btn-primary s-btn-sm" (click)="resumeCourse(c)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg>
+            {{ c.progress===0 ? 'Start' : c.progress===100 ? 'Review' : 'Continue' }}
+          </button>
+          <button class="s-btn s-btn-ghost s-btn-sm" (click)="viewCourse(c.id)">Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty -->
+  <div class="sc-empty" *ngIf="!filtered.length">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <p>No courses match your search.</p>
+  </div>
+
+</div>

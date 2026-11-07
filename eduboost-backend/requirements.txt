@@ -1,0 +1,15 @@
+fastapi>=0.110,<1.0
+uvicorn[standard]>=0.27,<1.0
+sqlalchemy>=2.0,<3.0
+pydantic[email]>=2.6,<3.0
+python-jose[cryptography]>=3.3,<4.0
+passlib[bcrypt]>=1.7,<2.0
+python-multipart>=0.0.9
+python-dotenv>=1.0,<2.0
+
+# RAG assistant dependencies
+chromadb>=0.5,<2.0
+llama-index>=0.11,<1.0
+llama-index-vector-stores-chroma>=0.2,<1.0
+llama-index-embeddings-ollama>=0.3,<1.0
+llama-index-llms-groq>=0.2,<1.0

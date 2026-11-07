@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduBoost — AI Study Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-circle"><i class="ti ti-brain"></i></div>
+      <span>EduBoost</span>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">Course</p>
+      <select id="courseSelect">
+        <option value="python">Python</option>
+        <option value="droit">Droit</option>
+        <option value="rechercheOP">Recherche OP</option>
+      </select>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">AI Tools</p>
+      <button class="tool-btn" data-action="summary"><i class="ti ti-file-text"></i> Summary</button>
+      <button class="tool-btn" data-action="quiz"><i class="ti ti-help-circle"></i> Quiz</button>
+      <button class="tool-btn" data-action="level"><i class="ti ti-chart-bar"></i> Detect Level</button>
+      <button class="tool-btn" data-action="recommend"><i class="ti ti-star"></i> Recommendations</button>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">Upload Document</p>
+      <label class="upload-zone" id="uploadZone">
+        <i class="ti ti-cloud-upload"></i>
+        <span>Click to upload</span>
+        <small>PDF, DOCX, PPTX, TXT</small>
+        <input type="file" id="fileInput" accept=".pdf,.docx,.pptx,.txt" hidden/>
+      </label>
+      <div id="uploadStatus"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">Indexed Files</p>
+      <div id="filesList"><p class="no-files">No files loaded</p></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="logo-circle small"><i class="ti ti-brain"></i></div>
+        <div>
+          <h1>EduBoost Assistant</h1>
+          <p id="topbarCourse">Course: Python</p>
+        </div>
+      </div>
+      <div class="status-dot" id="statusDot" title="Backend status"></div>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="msg bot">
+        <div class="avatar">AI</div>
+        <div class="bubble">
+          Hi! I'm your EduBoost assistant 👋<br/>
+          Select a course and ask me anything — explanations, summaries, quizzes, and more.
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-btns">
+      <button class="qbtn" data-q="Summarize this course for me">📚 Summarize</button>
+      <button class="qbtn" data-q="Give me a quiz on this course">🧠 Quick Quiz</button>
+      <button class="qbtn" data-q="What are the key concepts I need to know?">💡 Key Concepts</button>
+      <button class="qbtn" data-q="What topics should I focus on to improve?">🎯 Study Tips</button>
+    </div>
+
+    <div class="input-row">
+      <textarea id="chatInput" placeholder="Ask anything about your course..." rows="1"></textarea>
+      <button id="sendBtn"><i class="ti ti-send"></i></button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

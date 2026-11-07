@@ -1,0 +1,129 @@
+<div class="sh-page">
+
+  <!-- Welcome -->
+  <div class="sh-welcome">
+    <div class="sh-welcome-left">
+      <div class="sh-greeting">{{ greeting }}, <span>{{ user?.name?.split(' ')[0] || 'Learner' }}</span> 👋</div>
+      <p class="sh-sub">You're making great progress! Keep up the momentum today.</p>
+      <div class="sh-cta-row">
+        <button class="sh-btn-white" (click)="goToCatalog()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Explore Courses
+        </button>
+        <button class="sh-btn-outline" (click)="goToProgress()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          View Progress
+        </button>
+      </div>
+    </div>
+    <div class="sh-welcome-art">
+      <div class="sh-art-ring sh-ring1"></div>
+      <div class="sh-art-ring sh-ring2"></div>
+      <div class="sh-art-ring sh-ring3"></div>
+      <div class="sh-art-center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="sh-stats">
+    <div *ngFor="let s of stats; let i=index" class="sh-stat" [style.animation-delay]="(i*70)+'ms'">
+      <div class="sh-stat-icon" [ngClass]="'si-'+s.color">
+        <svg *ngIf="s.icon==='book'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <svg *ngIf="s.icon==='check'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <svg *ngIf="s.icon==='quiz'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <svg *ngIf="s.icon==='clock'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="sh-stat-val">{{ s.value }}</div>
+      <div class="sh-stat-lbl">{{ s.label }}</div>
+      <div class="sh-stat-sub">{{ s.sub }}</div>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="sh-grid">
+
+    <!-- Continue learning -->
+    <div class="sh-panel">
+      <div class="sh-panel-head">
+        <h3>Continue Learning</h3>
+        <button class="s-btn s-btn-ghost s-btn-sm" (click)="goToCourses()">View all</button>
+      </div>
+      <div class="sh-continue-list">
+        <div *ngFor="let p of continueCourses" class="sh-continue-card" (click)="goToCourse(p.course.id)">
+          <div class="sh-cc-thumb" [style.background-image]="'url('+p.course.image+')'">
+            <div class="sh-cc-overlay"></div>
+            <span class="sh-cc-level">{{ p.course.difficulty }}</span>
+          </div>
+          <div class="sh-cc-body">
+            <div class="sh-cc-cat">{{ p.course.category }}</div>
+            <div class="sh-cc-title">{{ p.course.title }}</div>
+            <div class="sh-cc-meta">
+              <span>{{ p.course.chapters?.length || 0 }} chapters</span>
+              <span>{{ p.course.duration }}</span>
+            </div>
+            <div class="sh-prog-wrap">
+              <div class="s-prog-bar" style="flex:1">
+                <div class="s-prog-fill" [style.width]="p.progress+'%'"></div>
+              </div>
+              <span class="sh-prog-pct">{{ p.progress }}%</span>
+            </div>
+          </div>
+        </div>
+        <div class="sh-empty" *ngIf="!continueCourses.length">
+          <p>No courses started yet.</p>
+          <button class="s-btn s-btn-primary s-btn-sm" (click)="goToCatalog()">Browse Catalog</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity -->
+    <div class="sh-panel">
+      <div class="sh-panel-head">
+        <h3>Recent Activity</h3>
+        <span class="sh-panel-badge">{{ recentActivity.length }}</span>
+      </div>
+      <div class="sh-activity">
+        <div class="sh-empty" *ngIf="!recentActivity.length"><p>No recent activity yet.</p></div>
+        <div *ngFor="let a of recentActivity; let i=index" class="sh-act-item" [style.animation-delay]="(i*55)+'ms'">
+          <div class="sh-act-icon" [ngClass]="'ai-'+a.color">
+            <svg *ngIf="a.icon==='quiz'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/></svg>
+            <svg *ngIf="a.icon==='book'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <svg *ngIf="a.icon==='star'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="sh-act-body">
+            <div class="sh-act-label">{{ a.label }}</div>
+            <div class="sh-act-detail">{{ a.detail }}</div>
+          </div>
+          <div class="sh-act-time">{{ a.time }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="sh-panel sh-full">
+      <div class="sh-panel-head">
+        <h3>AI Recommendations</h3>
+        <div class="sh-ai-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          AI-Powered
+        </div>
+      </div>
+      <div class="sh-rec-grid">
+        <div *ngFor="let r of recommendations" class="sh-rec-card">
+          <div class="sh-rec-top">
+            <div class="sh-rec-thumb" [style.background-image]="'url('+r.course.image+')'"></div>
+            <div class="sh-rec-info">
+              <div class="sh-rec-title">{{ r.course.title }}</div>
+              <div class="sh-rec-risk" [style.color]="getRiskColor(r.risk)">● Risk: {{ r.risk | titlecase }}</div>
+            </div>
+          </div>
+          <div class="sh-rec-text">{{ r.rec }}</div>
+          <button class="s-btn s-btn-cyan s-btn-sm" (click)="goToCourse(r.course.id)">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

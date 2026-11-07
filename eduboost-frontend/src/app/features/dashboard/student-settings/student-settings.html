@@ -1,0 +1,186 @@
+<!-- ══ TOAST ══ -->
+<div class="ss-toast" *ngIf="toast" [class]="'ss-toast--'+toastType">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15">
+    <polyline *ngIf="toastType==='success'" points="20 6 9 17 4 12"/>
+    <ng-container *ngIf="toastType==='danger'"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></ng-container>
+    <ng-container *ngIf="toastType==='info'"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></ng-container>
+  </svg>
+  {{ toast }}
+</div>
+
+<!-- ══ PAGE ══ -->
+<div class="ss-page">
+
+  <!-- ── HERO BANNER ── -->
+  <div class="ss-hero">
+    <div class="ss-hero-grid"></div>
+    <div class="ss-hero-orb ss-orb1"></div>
+    <div class="ss-hero-orb ss-orb2"></div>
+    <div class="ss-hero-content">
+      <div class="ss-hero-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="ss-hero-chip">Student Account</div>
+        <h1 class="ss-hero-title">Settings</h1>
+        <p class="ss-hero-sub">Customize your learning experience</p>
+      </div>
+    </div>
+    <!-- Tab indicators -->
+    <div class="ss-hero-tabs">
+      <button class="ss-tab" [class.ss-tab--active]="activeSection==='notifications'" (click)="activeSection='notifications'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Notifications
+      </button>
+      <button class="ss-tab" [class.ss-tab--active]="activeSection==='preferences'" (click)="activeSection='preferences'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82"/></svg>
+        Preferences
+      </button>
+    </div>
+  </div>
+
+  <!-- ── CONTENT PANELS ── -->
+
+  <!-- NOTIFICATIONS -->
+  <div class="ss-panel ss-panel--anim" *ngIf="activeSection==='notifications'">
+    <div class="ss-panel-head">
+      <div class="ss-panel-ico ss-ico--violet">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+      <div><h3>Notification Settings</h3><p>Choose how you receive updates about your learning</p></div>
+    </div>
+    <div class="ss-toggles">
+      <div class="ss-toggle-row">
+        <div class="ss-tgl-info">
+          <div class="ss-tgl-lbl">Email Notifications</div>
+          <div class="ss-tgl-sub">Receive updates via email about new courses and features</div>
+        </div>
+        <label class="ss-switch">
+          <input type="checkbox" [(ngModel)]="prefs.emailNotifs"/>
+          <span class="ss-slider"></span>
+        </label>
+      </div>
+      <div class="ss-toggle-row">
+        <div class="ss-tgl-info">
+          <div class="ss-tgl-lbl">Progress Alerts</div>
+          <div class="ss-tgl-sub">Get notified about your learning milestones</div>
+        </div>
+        <label class="ss-switch">
+          <input type="checkbox" [(ngModel)]="prefs.progressAlerts"/>
+          <span class="ss-slider"></span>
+        </label>
+      </div>
+      <div class="ss-toggle-row">
+        <div class="ss-tgl-info">
+          <div class="ss-tgl-lbl">Quiz Reminders</div>
+          <div class="ss-tgl-sub">Reminder when a quiz is available to complete</div>
+        </div>
+        <label class="ss-switch">
+          <input type="checkbox" [(ngModel)]="prefs.quizReminders"/>
+          <span class="ss-slider"></span>
+        </label>
+      </div>
+      <div class="ss-toggle-row">
+        <div class="ss-tgl-info">
+          <div class="ss-tgl-lbl">Newsletter</div>
+          <div class="ss-tgl-sub">Weekly tips, new course announcements and offers</div>
+        </div>
+        <label class="ss-switch">
+          <input type="checkbox" [(ngModel)]="prefs.newsletter"/>
+          <span class="ss-slider"></span>
+        </label>
+      </div>
+    </div>
+    <div class="ss-panel-foot">
+      <button class="ss-btn ss-btn--primary" (click)="saveNotifications()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+        Save Notifications
+      </button>
+    </div>
+  </div>
+
+  <!-- PREFERENCES -->
+  <div class="ss-panel ss-panel--anim" *ngIf="activeSection==='preferences'">
+    <div class="ss-panel-head">
+      <div class="ss-panel-ico ss-ico--amber">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+      <div><h3>Preferences</h3><p>Personalize your learning interface</p></div>
+    </div>
+    <div class="ss-pref-grid">
+      <div class="ss-pref-card">
+        <label class="ss-pref-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          Language
+        </label>
+        <select [(ngModel)]="prefs.language" class="ss-select">
+          <option>English</option>
+          <option>French</option>
+          <option>Arabic</option>
+        </select>
+      </div>
+      <div class="ss-pref-card">
+        <label class="ss-pref-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          </svg>
+          Theme
+        </label>
+        <select [(ngModel)]="prefs.theme" class="ss-select">
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+        </select>
+      </div>
+      <div class="ss-pref-card">
+        <label class="ss-pref-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Video Quality
+        </label>
+        <select [(ngModel)]="prefs.videoQuality" class="ss-select">
+          <option value="auto">Auto</option>
+          <option value="720p">720p HD</option>
+          <option value="1080p">1080p Full HD</option>
+          <option value="480p">480p</option>
+        </select>
+      </div>
+      <div class="ss-pref-card">
+        <label class="ss-pref-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Subtitles
+        </label>
+        <select [(ngModel)]="prefs.subtitles" class="ss-select">
+          <option value="off">Off</option>
+          <option value="en">English</option>
+          <option value="fr">French</option>
+        </select>
+      </div>
+    </div>
+    <div class="ss-panel-foot">
+      <button class="ss-btn ss-btn--primary" (click)="savePrefs()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+        Save Preferences
+      </button>
+    </div>
+  </div>
+
+</div>

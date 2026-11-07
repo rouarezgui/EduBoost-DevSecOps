@@ -1,0 +1,103 @@
+<div class="sp-page">
+
+  <!-- Summary stats -->
+  <div class="sp-summary">
+    <div class="sp-sum-card sc-indigo">
+      <div class="sp-sum-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+      <div class="sp-sum-val">{{ avgProgress }}%</div>
+      <div class="sp-sum-lbl">Avg Progress</div>
+    </div>
+    <div class="sp-sum-card sc-green">
+      <div class="sp-sum-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="sp-sum-val">{{ completedCount }}</div>
+      <div class="sp-sum-lbl">Completed</div>
+    </div>
+    <div class="sp-sum-card sc-cyan">
+      <div class="sp-sum-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/></svg></div>
+      <div class="sp-sum-val">{{ quizHistory.length }}</div>
+      <div class="sp-sum-lbl">Quizzes Taken</div>
+    </div>
+    <div class="sp-sum-card sc-amber">
+      <div class="sp-sum-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="sp-sum-val">{{ avgScore }}%</div>
+      <div class="sp-sum-lbl">Avg Quiz Score</div>
+    </div>
+  </div>
+
+  <!-- Two columns -->
+  <div class="sp-grid">
+
+    <!-- Course progress -->
+    <div class="sp-panel">
+      <div class="sp-panel-head"><h3>Course Progress</h3></div>
+      <div class="sp-course-list">
+        <div *ngFor="let p of progressList" class="sp-course-row" (click)="goToCourse(p.id)">
+          <div class="sp-cr-thumb" [style.background-image]="'url('+p.image+')'"></div>
+          <div class="sp-cr-body">
+            <div class="sp-cr-title">{{ p.title }}</div>
+            <div class="sp-cr-meta">
+              <span class="sp-cr-level">{{ p.difficulty || 'Beginner' }}</span>
+              <span class="sp-risk" [style.color]="getRiskColor(p.risk)">● {{ p.risk | titlecase }} risk</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+              <div class="s-prog-bar" style="flex:1">
+                <div class="s-prog-fill"
+                  [style.width]="p.progress+'%'"
+                  [style.background]="p.progress>=75?'linear-gradient(135deg,#059669,#10b981)':p.progress>=40?'linear-gradient(135deg,#6366f1,#8b5cf6)':'linear-gradient(135deg,#ef4444,#f97316)'">
+                </div>
+              </div>
+              <span class="sp-pct">{{ p.progress }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz history + Recommendations -->
+    <div style="display:flex;flex-direction:column;gap:20px">
+
+      <!-- Quiz history -->
+      <div class="sp-panel">
+        <div class="sp-panel-head"><h3>Quiz History</h3></div>
+        <div class="sp-quiz-list">
+          <div *ngFor="let q of quizHistory" class="sp-quiz-row">
+            <div class="sp-qz-icon" [style.background]="q.passed?'rgba(16,185,129,.15)':'rgba(239,68,68,.1)'"
+              [style.color]="q.passed?'#10b981':'#ef4444'">
+              <svg *ngIf="q.passed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg *ngIf="!q.passed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </div>
+            <div class="sp-qz-body">
+              <div class="sp-qz-name">{{ q.quiz }}</div>
+              <div class="sp-qz-course">{{ q.course }}</div>
+            </div>
+            <div style="text-align:right">
+              <div class="sp-qz-score" [style.color]="getScoreColor(q.score)">{{ q.score }}%</div>
+              <div class="sp-qz-date">{{ q.date }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="sp-panel">
+        <div class="sp-panel-head">
+          <h3>AI Recommendations</h3>
+          <div class="sp-ai-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4"/></svg>
+            Personalized
+          </div>
+        </div>
+        <div class="sp-rec-list">
+          <div *ngFor="let p of progressList.slice(0,4)" class="sp-rec-row">
+            <div class="sp-risk-dot" [style.background]="getRiskColor(p.risk)"></div>
+            <div>
+              <div class="sp-rec-title">{{ p.title }}</div>
+              <div class="sp-rec-text">{{ p.rec }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

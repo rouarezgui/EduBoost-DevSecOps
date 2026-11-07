@@ -1,0 +1,10 @@
+
+.sidebar-footer{position:relative;margin-top:12px}
+.btn-logout{background:linear-gradient(90deg,#ef4444,#f97316);border:none;color:#fff;padding:10px 12px;border-radius:8px;font-weight:600}
+.btn-logout:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(249,115,22,0.12)}
+
+.btn-inline-logout{background:linear-gradient(90deg,#ef4444,#fb923c);border:none;color:#fff;padding:8px 10px;border-radius:6px;font-weight:600;text-align:left}
+.btn-inline-logout:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(249,115,22,0.08)}
+
+.list-group a.list-group-item{cursor:pointer}
+

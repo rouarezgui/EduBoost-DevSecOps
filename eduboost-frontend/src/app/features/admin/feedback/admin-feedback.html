@@ -1,0 +1,82 @@
+<div class="feedback-page">
+  <!-- Toast -->
+  <div class="toast" *ngIf="toast" [ngClass]="'toast-'+toast.type">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    {{ toast.msg }}
+  </div>
+
+  <!-- Delete Confirm -->
+  <div class="modal-overlay" *ngIf="deleteTarget" (click)="cancelDelete()">
+    <div class="modal-box confirm-box" (click)="$event.stopPropagation()">
+      <div class="confirm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></div>
+      <h3>Delete Feedback?</h3>
+      <p>Remove feedback from <strong>{{ deleteTarget.userName }}</strong>?</p>
+      <div class="confirm-actions">
+        <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-delete" (click)="deleteFeedback()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Feedback Management</h1>
+      <p class="page-sub">Student ratings and comments per course</p>
+    </div>
+  </div>
+
+  <!-- Course selector -->
+  <div class="course-tabs">
+    <button *ngFor="let c of courses" class="course-tab" [class.active]="selectedCourseId === c.id" (click)="selectCourse(c.id)">
+      {{ c.title }}
+    </button>
+  </div>
+
+  <!-- Stats row -->
+  <div class="stats-row" *ngIf="selectedCourse">
+    <div class="stat-pill">
+      <svg viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span class="stat-val">{{ avgRating }}</span>
+      <span class="stat-lbl">Avg Rating</span>
+    </div>
+    <div class="stat-pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <span class="stat-val">{{ feedbacks.length }}</span>
+      <span class="stat-lbl">Reviews</span>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="toolbar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input [(ngModel)]="filter" placeholder="Search by student or comment..." />
+    </div>
+    <div class="count-badge">{{ filteredFeedbacks.length }} reviews</div>
+  </div>
+
+  <!-- Feedback list -->
+  <div class="feedback-list">
+    <div *ngFor="let f of filteredFeedbacks" class="feedback-card">
+      <div class="fb-header">
+        <div class="fb-avatar">{{ f.avatar || f.userName?.[0] || '?' }}</div>
+        <div class="fb-info">
+          <div class="fb-name">{{ f.userName }}</div>
+          <div class="fb-date">{{ f.createdAt }}</div>
+        </div>
+        <div class="fb-stars">
+          <svg *ngFor="let s of stars(f.rating)" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg *ngFor="let s of emptyStars(f.rating)" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <button class="btn-del-fb" (click)="confirmDelete(f)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+      </div>
+      <p class="fb-comment">{{ f.comment }}</p>
+    </div>
+    <div *ngIf="!filteredFeedbacks.length" class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <p>No feedback yet for this course</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,190 @@
+<div class="qz-page" *ngIf="quiz">
+
+  <!-- ══ HERO HEADER ══ -->
+  <div class="qz-hero">
+    <div class="qz-hero-bg"></div>
+    <div class="qz-hero-orb qz-orb1"></div>
+    <div class="qz-hero-orb qz-orb2"></div>
+
+    <div class="qz-hero-left">
+      <button class="qz-back-btn" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Back to course
+      </button>
+      <div class="qz-hero-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Quiz
+      </div>
+      <h1 class="qz-hero-title">{{ quiz.title }}</h1>
+      <p class="qz-hero-sub">{{ quiz.questions?.length || 0 }} questions · Test your knowledge</p>
+    </div>
+
+    <!-- Circular progress ring -->
+    <div class="qz-ring-wrap">
+      <svg viewBox="0 0 90 90" width="90" height="90">
+        <circle cx="45" cy="45" r="36" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="7"/>
+        <circle cx="45" cy="45" r="36" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="7"
+          stroke-linecap="round"
+          [attr.stroke-dasharray]="226"
+          [attr.stroke-dashoffset]="226 - (226 * answeredCount() / (quiz.questions?.length || 1))"
+          transform="rotate(-90 45 45)"
+          style="transition:.5s ease"/>
+      </svg>
+      <div class="qz-ring-text">
+        <span class="qz-ring-num">{{ answeredCount() }}</span>
+        <span class="qz-ring-den">/{{ quiz.questions?.length }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCORE RESULT ══ -->
+  <div *ngIf="score !== null" class="qz-result"
+       [class.qz-result--great]="score >= 70"
+       [class.qz-result--ok]="score >= 40 && score < 70"
+       [class.qz-result--low]="score < 40">
+
+    <div class="qz-result-glow"></div>
+
+    <div class="qz-result-ring-wrap">
+      <svg viewBox="0 0 150 150" width="150" height="150">
+        <circle cx="75" cy="75" r="62" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="9"/>
+        <circle cx="75" cy="75" r="62" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="9"
+          stroke-linecap="round"
+          [attr.stroke-dasharray]="390"
+          [attr.stroke-dashoffset]="390 - (390 * score / 100)"
+          transform="rotate(-90 75 75)"
+          style="transition:1.4s cubic-bezier(.4,0,.2,1)"/>
+      </svg>
+      <div class="qz-result-emoji">
+        {{ score >= 80 ? '🏆' : score >= 60 ? '🎉' : score >= 40 ? '💪' : '📚' }}
+      </div>
+    </div>
+
+    <div class="qz-result-body">
+      <div class="qz-result-grade">
+        {{ score >= 80 ? 'Outstanding!' : score >= 60 ? 'Well done!' : score >= 40 ? 'Good effort!' : 'Keep going!' }}
+      </div>
+      <div class="qz-result-pct">
+        <span class="qz-pct-num">{{ score }}</span><span class="qz-pct-sign">%</span>
+      </div>
+      <div class="qz-result-verdict" [class.qz-verdict--pass]="score>=70" [class.qz-verdict--fail]="score<70">
+        {{ score >= 70 ? '✓ Passed!' : '✗ Need 70% to pass' }}
+      </div>
+
+      <div class="qz-analytics" *ngIf="analytics">
+        <div class="qz-analytics-item">
+          <span>Progress</span>
+          <strong>{{ analytics.progress }}%</strong>
+        </div>
+        <div class="qz-analytics-item">
+          <span>Risk</span>
+          <strong>{{ analytics.riskLevel | titlecase }} ({{ analytics.riskScore }}%)</strong>
+        </div>
+      </div>
+
+      <div class="qz-recommendation" *ngIf="analytics">
+        {{ analytics.recommendation }}
+      </div>
+
+      <!-- Breakdown -->
+      <div class="qz-breakdown">
+        <div class="qz-bk-item">
+          <div class="qz-bk-val qz-bk--correct">{{ correctCount }}</div>
+          <div class="qz-bk-lbl">Correct</div>
+        </div>
+        <div class="qz-bk-sep"></div>
+        <div class="qz-bk-item">
+          <div class="qz-bk-val qz-bk--wrong">{{ (quiz.questions?.length || 0) - correctCount }}</div>
+          <div class="qz-bk-lbl">Incorrect</div>
+        </div>
+        <div class="qz-bk-sep"></div>
+        <div class="qz-bk-item">
+          <div class="qz-bk-val">{{ quiz.questions?.length || 0 }}</div>
+          <div class="qz-bk-lbl">Total</div>
+        </div>
+      </div>
+
+      <div class="qz-result-actions">
+        <button *ngIf="score < 100" class="qz-btn qz-btn--white" (click)="reset()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 .49-4.53"/>
+          </svg>
+          Try Again
+        </button>
+        <button class="qz-btn qz-btn--outline" (click)="goBack()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Back to Course
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ QUESTIONS FORM ══ -->
+  <form *ngIf="score === null" (ngSubmit)="submit()" class="qz-form">
+
+    <div *ngFor="let q of quiz.questions; let i = index"
+         class="qz-card"
+         [style.animation-delay]="(i * 55) + 'ms'">
+      <div class="qz-card-num">
+        <span>{{ i + 1 }}</span>
+        <div class="qz-num-line"></div>
+      </div>
+      <div class="qz-card-body">
+        <div class="qz-question">{{ q.q }}</div>
+        <div class="qz-options">
+          <label *ngFor="let opt of q.a; let j = index"
+                 class="qz-opt"
+                 [class.qz-opt--sel]="answers[i] === j">
+            <input type="radio" [name]="'q'+i" (change)="answers[i]=j" [checked]="answers[i]===j" style="display:none"/>
+            <div class="qz-opt-radio">
+              <div class="qz-opt-dot" *ngIf="answers[i]===j"></div>
+            </div>
+            <span class="qz-opt-letter">{{ 'ABCD'[j] }}</span>
+            <span class="qz-opt-text">{{ opt }}</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer bar -->
+    <div class="qz-footer">
+      <button type="button" class="qz-btn qz-btn--ghost" (click)="reset()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13">
+          <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.53"/>
+        </svg>
+        Reset
+      </button>
+      <div class="qz-footer-prog">
+        <div class="qz-fp-bar">
+          <div class="qz-fp-fill" [style.width]="(answeredCount() / (quiz.questions?.length || 1) * 100) + '%'"></div>
+        </div>
+        <span>{{ answeredCount() }} / {{ quiz.questions?.length }}</span>
+      </div>
+      <button type="submit" class="qz-btn qz-btn--submit"
+              [disabled]="answeredCount() < (quiz.questions?.length || 0)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Submit Quiz
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<div *ngIf="!quiz" class="qz-not-found">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="52" height="52">
+    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+  </svg>
+  <h2>Quiz not found</h2>
+  <button class="qz-btn qz-btn--ghost" (click)="goBack()">Go back</button>
+</div>

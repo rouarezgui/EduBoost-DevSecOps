@@ -1,0 +1,14 @@
+{
+  "courses": [
+    {
+      "id": "1",
+      "title": "Angular Basics",
+      "description": "Learn Angular step by step"
+    },
+    {
+      "id": "2",
+      "title": "Advanced TypeScript",
+      "description": "Deep dive into TS"
+    }
+  ]
+}

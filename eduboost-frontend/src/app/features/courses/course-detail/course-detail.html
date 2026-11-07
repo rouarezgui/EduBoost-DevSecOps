@@ -1,0 +1,250 @@
+<!-- Toast -->
+<div class="cd-toast" *ngIf="feedbackToast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  {{ feedbackToast }}
+</div>
+
+<!-- Feedback Modal -->
+<div class="cd-overlay" *ngIf="showFeedbackModal" (click)="closeFeedback()">
+  <div class="cd-modal" (click)="$event.stopPropagation()">
+    <div class="cdm-header">
+      <div class="cdm-title-wrap">
+        <div class="cdm-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div>
+          <h3>Leave feedback</h3>
+          <p>Your review helps others make better decisions</p>
+        </div>
+      </div>
+      <button class="cdm-close" (click)="closeFeedback()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="cdm-body">
+      <div class="field-error" *ngIf="feedbackError">{{ feedbackError }}</div>
+
+      <!-- Star rating picker -->
+      <div class="rating-group">
+        <label>Rating *</label>
+        <div class="star-picker">
+          <button *ngFor="let s of stars" class="star-btn"
+            [class.filled]="s <= (feedbackHover || feedbackForm.rating)"
+            (mouseenter)="setHover(s)" (mouseleave)="setHover(0)"
+            (click)="setRating(s)">★</button>
+          <span class="rating-label" *ngIf="feedbackHover || feedbackForm.rating">
+            {{ getRatingLabel(feedbackHover || feedbackForm.rating) }}
+          </span>
+          <span class="rating-label muted-label" *ngIf="!feedbackHover && !feedbackForm.rating">— tap to rate</span>
+        </div>
+      </div>
+
+      <!-- Comment -->
+      <div class="field-group">
+        <label>Comment *</label>
+        <textarea [(ngModel)]="feedbackForm.comment"
+          placeholder="Share your experience with this course..."
+          rows="4"></textarea>
+        <div class="char-count">{{ feedbackForm.comment.length }} characters</div>
+      </div>
+    </div>
+
+    <div class="cdm-footer">
+      <button class="btn-cancel" (click)="closeFeedback()">Cancel</button>
+      <button class="btn-submit" (click)="submitFeedback()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Submit Feedback
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Main page -->
+<div class="cd-page" *ngIf="course; else notFound">
+
+  <!-- Hero banner -->
+  <div class="cd-hero" [style.background-image]="'url('+(course.image || 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=1200&q=80')+')'">
+    <div class="cd-hero-overlay">
+      <div class="cd-hero-content">
+        <div class="cd-hero-top">
+          <button class="cd-back" (click)="goBack()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+            Back
+          </button>
+          <span class="cd-level" [ngClass]="getLevelClass(course.difficulty)">{{ course.difficulty || 'Beginner' }}</span>
+        </div>
+        <div class="cd-category">{{ course.category || 'General' }}</div>
+        <h1 class="cd-title">{{ course.title }}</h1>
+        <p class="cd-desc" *ngIf="course.description">{{ course.description }}</p>
+
+        <div class="cd-meta-row">
+          <div class="cd-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            {{ course.chapters?.length || 0 }} Chapters
+          </div>
+          <div class="cd-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {{ course.duration || '—' }}
+          </div>
+          <div class="cd-meta-item" *ngIf="avgRating > 0">
+            <span class="star-inline">★</span>
+            {{ avgRating }} ({{ feedbacks.length }} reviews)
+          </div>
+        </div>
+
+        <div class="cd-hero-actions">
+          <a *ngIf="course.chapters?.length" [routerLink]="['/courses', course.id, 'chapters', course.chapters[0].id]" class="btn-start">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg>
+            Start Learning
+          </a>
+          <button class="btn-feedback" (click)="openFeedback(); activeTab='feedback'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Leave Feedback
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rating summary bar -->
+  <div class="cd-rating-bar" *ngIf="feedbacks.length > 0">
+    <div class="rating-summary">
+      <div class="rating-big">{{ avgRating }}</div>
+      <div>
+        <div class="stars-display">
+          <span *ngFor="let s of stars" [ngClass]="s <= avgRating ? 'star-on' : 'star-off'">★</span>
+        </div>
+        <div class="rating-count">{{ feedbacks.length }} review{{ feedbacks.length !== 1 ? 's' : '' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="cd-tabs">
+    <button class="cd-tab" [class.active]="activeTab==='chapters'" (click)="activeTab='chapters'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Chapters
+      <span class="tab-count">{{ course.chapters?.length || 0 }}</span>
+    </button>
+    <button class="cd-tab" [class.active]="activeTab==='quizzes'" (click)="activeTab='quizzes'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Quizzes
+      <span class="tab-count">{{ course.quizzes?.length || 0 }}</span>
+    </button>
+    <button class="cd-tab" [class.active]="activeTab==='feedback'" (click)="activeTab='feedback'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Reviews
+      <span class="tab-count" [class.tab-count-red]="feedbacks.length > 0">{{ feedbacks.length }}</span>
+    </button>
+  </div>
+
+  <!-- Tab content -->
+  <div class="cd-body">
+
+    <!-- CHAPTERS tab -->
+    <div *ngIf="activeTab==='chapters'" class="tab-panel">
+      <div class="panel-header">
+        <h2>Course Chapters</h2>
+        <span class="panel-sub">{{ course.chapters?.length || 0 }} lessons • {{ course.duration || '—' }} total</span>
+      </div>
+
+      <div class="chapters-list" *ngIf="course.chapters?.length">
+        <a *ngFor="let ch of course.chapters; let i=index"
+          [routerLink]="['/courses', course.id, 'chapters', ch.id]"
+          class="chapter-row">
+          <div class="ch-num">{{ i + 1 }}</div>
+          <div class="ch-info">
+            <div class="ch-title">{{ ch.title }}</div>
+            <div class="ch-preview" *ngIf="ch.content">{{ ch.content }}</div>
+          </div>
+          <div class="ch-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </a>
+      </div>
+
+      <div class="empty-panel" *ngIf="!course.chapters?.length">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <p>No chapters available yet.</p>
+        <span>Content will be added soon.</span>
+      </div>
+    </div>
+
+    <!-- QUIZZES tab -->
+    <div *ngIf="activeTab==='quizzes'" class="tab-panel">
+      <div class="panel-header">
+        <h2>Quizzes</h2>
+        <span class="panel-sub">Test your knowledge</span>
+      </div>
+
+      <div class="quizzes-list" *ngIf="course.quizzes?.length">
+        <div *ngFor="let q of course.quizzes; let i=index" class="quiz-row">
+          <div class="qz-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="qz-info">
+            <div class="qz-title">{{ q.title }}</div>
+            <div class="qz-sub">{{ q.questions?.length || 0 }} questions</div>
+          </div>
+          <a [routerLink]="['/courses', course.id, 'quizzes', q.id]" class="btn-quiz">
+            Start Quiz
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="empty-panel" *ngIf="!course.quizzes?.length">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/></svg>
+        <p>No quizzes yet.</p>
+        <span>Check back later for assessments.</span>
+      </div>
+    </div>
+
+    <!-- FEEDBACK tab -->
+    <div *ngIf="activeTab==='feedback'" class="tab-panel">
+      <div class="panel-header fb-header">
+        <div>
+          <h2>Student Reviews</h2>
+          <span class="panel-sub">{{ feedbacks.length }} review{{ feedbacks.length !== 1 ? 's' : '' }}</span>
+        </div>
+        <button class="btn-add-feedback" (click)="openFeedback()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Write a review
+        </button>
+      </div>
+
+      <!-- All feedbacks -->
+      <div class="feedbacks-list" *ngIf="feedbacks.length">
+        <div *ngFor="let fb of feedbacks" class="fb-card" [class.is-mine]="fb.id === userFeedback?.id">
+          <div class="fb-avatar">{{ fb.avatar }}</div>
+          <div class="fb-content">
+            <div class="fb-top">
+              <span class="fb-name">{{ fb.userName }} <span class="you-chip" *ngIf="currentUser?.id === fb.userId">You</span></span>
+              <div class="fb-stars">
+                <span *ngFor="let s of stars" [ngClass]="s <= fb.rating ? 'star-on' : 'star-off'">★</span>
+              </div>
+            </div>
+            <div class="fb-comment">{{ fb.comment }}</div>
+            <div class="fb-date">{{ fb.updatedAt ? 'Updated ' + fb.updatedAt : fb.createdAt }}</div>
+          </div>
+          <div class="fb-actions" *ngIf="currentUser?.id === fb.userId">
+            <button class="fba-del" (click)="deleteFeedback(fb)" title="Delete">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-panel" *ngIf="!feedbacks.length">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <p>No reviews yet.</p>
+        <span>Be the first to share your experience!</span>
+        <button class="btn-add-feedback" (click)="openFeedback()" style="margin-top:16px">Write first review</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #notFound>

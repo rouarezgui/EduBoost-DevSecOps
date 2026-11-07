@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins', sans-serif;
+}
+
+/* Background image */
+.login-page{
+  height:100vh;
+  width:100%;
+  background: url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3") no-repeat center center/cover;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Glass form */
+.login-box{
+  width:380px;
+  padding:40px;
+  background:rgba(25, 78, 4, 0.534);
+  border-radius:12px;
+  backdrop-filter:blur(10px);
+  box-shadow:0 10px 40px rgba(0,0,0,0.3);
+  text-align:center;
+  color:rgb(255, 255, 255);
+}
+
+.title{
+  margin-bottom:25px;
+  font-weight:500;
+}
+
+/* inputs */
+
+.input-group{
+  margin-bottom: 20px;
+}
+
+.input-group input{
+  width: 100%;        /* largeur */
+  height: 45px;       /* hauteur */
+  padding: 10px 15px; /* espace intérieur */
+  font-size: 16px;    /* taille du texte */
+  border-radius: 5px; /* optionnel: coins arrondis */
+}
+.input-icon-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+
+.field-icon{
+  position:absolute;
+  left:14px;
+  width:16px;
+  height:16px;
+  color:#333;
+  pointer-events:none;
+  z-index:1;
+}
+
+.input-icon-wrap input{
+  width:100%;
+  padding:12px 40px 12px 40px;
+  border:none;
+  border-radius:30px;
+  outline:none;
+  background:rgba(255,255,255,0.8);
+  color:#000;
+}
+
+.input-icon-wrap input::placeholder{
+  color:#555;
+}
+
+.eye-btn{
+  position:absolute;
+  right:12px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:0;
+  display:flex;
+  align-items:center;
+  color:#555;
+}
+
+.eye-btn svg{
+  width:16px;
+  height:16px;
+}
+
+/* button */
+
+.login-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:30px;
+  background:rgba(25, 78, 4, 0.534);
+  color:#fff;
+  font-weight:600;
+  margin-top:10px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.login-btn:hover{
+  background:#f39c6b;
+}
+
+/* options */
+
+.options{
+  display:flex;
+  justify-content:space-between;
+  margin-top:10px;
+  font-size:13px;
+}
+
+.options a{
+  color:white;
+  text-decoration:none;
+}
+
+.options a:hover{
+  text-decoration:underline;
+}
+
+/* error */
+
+.error{
+  margin-top:10px;
+  color:#ffdddd;
+}
+
+.register-link{
+  margin-top:15px;
+}
+
+.register-link a{
+  color:white;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.register-link a:hover{
+  text-decoration:underline;
+}

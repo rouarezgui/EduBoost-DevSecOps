@@ -1,0 +1,181 @@
+<div class="ch-page" *ngIf="course && chapter; else notFound">
+
+  <!-- ══ VIDEO HERO ══ -->
+  <div class="ch-video-hero">
+    <div class="ch-vh-bg"></div>
+    <div class="ch-vh-orb ch-vorb1"></div>
+    <div class="ch-vh-orb ch-vorb2"></div>
+
+    <!-- Breadcrumb -->
+    <div class="ch-breadcrumb">
+      <button class="ch-back-btn" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Back
+      </button>
+      <span class="ch-sep">›</span>
+      <span class="ch-bc-course">{{ course.title }}</span>
+      <span class="ch-sep">›</span>
+      <span class="ch-bc-active">Chapter {{ chapterIndex + 1 }}</span>
+    </div>
+
+    <!-- ── VIDEO PLAYER AREA ── -->
+    <div class="ch-video-frame">
+      <div class="ch-video-chip">
+        Chapter {{ chapterIndex + 1 }} / {{ course.chapters?.length }}
+      </div>
+
+      <!-- ✅ REAL YouTube iframe (shown when playing) -->
+      <div class="ch-yt-player" *ngIf="videoPlaying && videoUrl">
+        <iframe
+          [src]="videoUrl"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <!-- ✅ Thumbnail + Play button (shown before playing) -->
+      <div class="ch-play-zone" *ngIf="!videoPlaying" (click)="playVideo()">
+        <!-- YouTube thumbnail as background -->
+        <div class="ch-yt-thumb" *ngIf="videoId"
+             [style.background-image]="'url(https://img.youtube.com/vi/'+videoId+'/maxresdefault.jpg)'">
+          <div class="ch-thumb-overlay"></div>
+        </div>
+        <!-- Fallback dark bg if no video -->
+        <div class="ch-thumb-fallback" *ngIf="!videoId"></div>
+
+        <!-- Ripple + Play -->
+        <div class="ch-play-ripple"></div>
+        <div class="ch-play-ripple ch-ripple2"></div>
+        <div class="ch-play-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="36" height="36">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+        </div>
+
+        <div class="ch-video-info">
+          <div class="ch-video-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+              <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
+            </svg>
+            Video Lesson
+          </div>
+          <h2 class="ch-video-title">{{ chapter.title }}</h2>
+          <p class="ch-video-sub" *ngIf="videoId">Click to watch ▶</p>
+          <p class="ch-video-sub" *ngIf="!videoId">Video coming soon</p>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="ch-video-progress">
+        <div class="ch-vp-bar">
+          <div class="ch-vp-fill" [style.width]="((chapterIndex+1) / (course.chapters?.length||1) * 100)+'%'"></div>
+        </div>
+        <span>{{ chapterIndex + 1 }} of {{ course.chapters?.length }} chapters</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONTENT + SIDEBAR ══ -->
+  <div class="ch-layout">
+
+    <div class="ch-main">
+      <div class="ch-content-card">
+        <div class="ch-content-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          Chapter {{ chapterIndex + 1 }} — Lesson Content
+        </div>
+        <h1 class="ch-content-title">{{ chapter.title }}</h1>
+        <div class="ch-divider"></div>
+        <p class="ch-content-text">{{ chapter.content }}</p>
+      </div>
+
+      <div class="ch-nav-row">
+        <a *ngIf="prevChapter"
+           [routerLink]="['/courses', course.id, 'chapters', prevChapter.id]"
+           class="ch-nav-btn ch-nav--prev">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          <div>
+            <div class="ch-nav-meta">Previous</div>
+            <div class="ch-nav-name">{{ prevChapter.title }}</div>
+          </div>
+        </a>
+        <div *ngIf="!prevChapter"></div>
+
+        <a *ngIf="nextChapter"
+           [routerLink]="['/courses', course.id, 'chapters', nextChapter.id]"
+           class="ch-nav-btn ch-nav--next">
+          <div>
+            <div class="ch-nav-meta">Next</div>
+            <div class="ch-nav-name">{{ nextChapter.title }}</div>
+          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </a>
+
+        <a *ngIf="!nextChapter"
+           [routerLink]="['/courses', course.id]"
+           class="ch-nav-btn ch-nav--finish">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <div>
+            <div class="ch-nav-meta">Complete</div>
+            <div class="ch-nav-name">Finish Course</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="ch-sidebar">
+      <div class="ch-sb-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+        Course Contents
+        <span class="ch-sb-count">{{ course.chapters?.length }}</span>
+      </div>
+      <div class="ch-sb-list">
+        <a *ngFor="let ch of course.chapters; let i = index"
+           [routerLink]="['/courses', course.id, 'chapters', ch.id]"
+           class="ch-sb-row"
+           [class.ch-sb--active]="i === chapterIndex"
+           [class.ch-sb--done]="i < chapterIndex">
+          <div class="ch-sb-status">
+            <svg *ngIf="i < chapterIndex" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <svg *ngIf="i === chapterIndex" viewBox="0 0 24 24" fill="currentColor" width="10" height="10">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            <span *ngIf="i > chapterIndex">{{ i + 1 }}</span>
+          </div>
+          <div class="ch-sb-info">
+            <div class="ch-sb-title">{{ ch.title }}</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #notFound>
+  <div class="ch-not-found">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="52" height="52">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+    </svg>
+    <h2>Chapter not found</h2>
+    <button class="ch-back-btn" (click)="goBack()">Go back</button>
+  </div>
+</ng-template>

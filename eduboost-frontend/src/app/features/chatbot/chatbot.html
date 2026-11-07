@@ -1,0 +1,60 @@
+<div class="chatbot-root">
+  <div class="chat-container">
+    <!-- Header -->
+    <div class="chat-header">
+      <button class="back-fab" (click)="goBack()" title="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="bot-avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7H3a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/><path d="M5 14v8"/><path d="M19 14v8"/><path d="M5 18h14"/><circle cx="9" cy="11" r="1" fill="currentColor"/><circle cx="15" cy="11" r="1" fill="currentColor"/></svg>
+      </div>
+      <div class="header-info">
+        <div class="bot-name">EduBoost AI</div>
+        <div class="bot-status"><span class="status-dot"></span> Online</div>
+      </div>
+      <button class="clear-btn" (click)="clearChat()" title="Clear chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div class="messages-area" #scrollEl>
+      <div class="date-chip">Today</div>
+      <div *ngFor="let m of messages" class="msg-row" [ngClass]="m.from">
+        <div class="msg-av" *ngIf="m.from==='bot'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7H3a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/></svg>
+        </div>
+        <div class="bubble" [ngClass]="m.from==='user'?'bubble-user':'bubble-bot'">
+          {{ m.text }}
+          <div class="msg-time">{{ m.time }}</div>
+        </div>
+      </div>
+      <div class="typing" *ngIf="isTyping">
+        <div class="msg-av">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7H3a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/></svg>
+        </div>
+        <div class="bubble bubble-bot typing-bubble">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="suggestions" *ngIf="messages.length <= 1">
+      <button *ngFor="let s of suggestions" class="suggestion-chip" (click)="useSuggestion(s)">{{ s }}</button>
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input-area">
+      <div class="input-wrap">
+        <textarea [(ngModel)]="input" placeholder="Ask me anything about your courses..."
+          rows="1" (keydown.enter)="onEnter($event)"
+          (input)="autoResize($event)"></textarea>
+        <button class="send-btn" (click)="send()" [disabled]="!input.trim()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <p class="disclaimer">AI assistant — answers may not be perfectly accurate.</p>
+    </div>
+  </div>
+</div>

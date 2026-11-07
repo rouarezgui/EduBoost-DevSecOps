@@ -1,0 +1,194 @@
+<!-- ══ TOAST ══ -->
+<div class="ap-toast" *ngIf="toast" [class]="'ap-toast--'+toastType">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15">
+    <polyline *ngIf="toastType==='success'" points="20 6 9 17 4 12"/>
+    <ng-container *ngIf="toastType==='danger'"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></ng-container>
+  </svg>
+  {{ toast }}
+</div>
+
+<!-- ══ PASSWORD MODAL ══ -->
+<div class="ap-overlay" *ngIf="showPwModal" (click)="showPwModal=false">
+  <div class="ap-modal" (click)="$event.stopPropagation()">
+    <div class="ap-modal-head">
+      <div class="ap-modal-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <div><h3>Change Password</h3><p>Admin security</p></div>
+      <button class="ap-modal-close" (click)="showPwModal=false">✕</button>
+    </div>
+    <div class="ap-modal-err" *ngIf="pwError">⚠ {{ pwError }}</div>
+    <div class="ap-modal-body">
+      <div class="ap-field"><label>Current Password</label>
+        <input type="password" [(ngModel)]="pwForm.current" placeholder="••••••••"/></div>
+      <div class="ap-field"><label>New Password</label>
+        <input type="password" [(ngModel)]="pwForm.newPw" placeholder="••••••••"/></div>
+      <div class="ap-field"><label>Confirm Password</label>
+        <input type="password" [(ngModel)]="pwForm.confirm" placeholder="••••••••"/></div>
+    </div>
+    <div class="ap-modal-foot">
+      <button class="ap-btn ap-btn--ghost" (click)="showPwModal=false">Cancel</button>
+      <button class="ap-btn ap-btn--accent" (click)="changePassword()">Update Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE ══ -->
+<div class="ap-page">
+
+  <!-- ── COMMAND CENTER HEADER ── -->
+  <div class="ap-cmd">
+    <div class="ap-cmd-grid"></div>
+    <div class="ap-glow ap-glow1"></div>
+    <div class="ap-glow ap-glow2"></div>
+
+    <!-- Avatar with orbital SVG -->
+    <div class="ap-av-area">
+      <svg class="ap-orbital" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(79,110,247,.3)"
+                stroke-width="1.5" stroke-dasharray="8 5"/>
+        <circle cx="60" cy="6" r="6" fill="#4f6ef7"/>
+      </svg>
+      <div class="ap-av">{{ getInitials() }}</div>
+      <div class="ap-av-star">★</div>
+    </div>
+
+    <!-- Identity -->
+    <div class="ap-cmd-info">
+      <div class="ap-chip">
+        <span class="ap-chip-pulse"></span>
+        Administrator
+      </div>
+      <h1 class="ap-cmd-name">{{ user?.name }}</h1>
+      <p class="ap-cmd-email">{{ user?.email }}</p>
+      <div class="ap-cmd-tags">
+        <span class="ap-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Joined {{ getJoinDate() }}
+        </span>
+        <span class="ap-tag ap-tag--online">
+          <span class="ap-online-dot"></span> Active
+        </span>
+      </div>
+    </div>
+
+    <!-- Metrics -->
+    <div class="ap-metrics">
+      <div class="ap-metric">
+        <div class="ap-metric-ico ap-mic--blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="ap-metric-val">{{ totalUsers }}</div>
+        <div class="ap-metric-lbl">Users</div>
+      </div>
+      <div class="ap-metric">
+        <div class="ap-metric-ico ap-mic--purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+        </div>
+        <div class="ap-metric-val">{{ totalCourses }}</div>
+        <div class="ap-metric-lbl">Courses</div>
+      </div>
+      <div class="ap-metric">
+        <div class="ap-metric-ico ap-mic--green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <div class="ap-metric-val">{{ activeUsers }}</div>
+        <div class="ap-metric-lbl">Active</div>
+      </div>
+      <div class="ap-metric">
+        <div class="ap-metric-ico ap-mic--amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="ap-metric-val">98%</div>
+        <div class="ap-metric-lbl">Uptime</div>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="ap-cmd-actions">
+      <button class="ap-cmd-btn ap-cmd-btn--accent" (click)="startEdit()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit Profile
+      </button>
+      <button class="ap-cmd-btn ap-cmd-btn--ghost" (click)="showPwModal=true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        Security
+      </button>
+    </div>
+  </div>
+
+  <!-- ── EDIT PANEL ── -->
+  <div class="ap-edit-panel" *ngIf="editMode">
+    <div class="ap-panel-head">
+      <div class="ap-panel-ico ap-pic--blue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div><h3>Edit Admin Profile</h3><p>Update your administrator information</p></div>
+    </div>
+    <div class="ap-edit-form">
+      <div class="ap-edit-row">
+        <div class="ap-field"><label>Full Name</label>
+          <input [(ngModel)]="editForm.name" placeholder="Admin name"/></div>
+        <div class="ap-field"><label>Email Address</label>
+          <input [(ngModel)]="editForm.email" type="email" placeholder="admin@eduboost.com"/></div>
+        <div class="ap-field"><label>Password</label>
+          <input [(ngModel)]="editForm.password" type="password" placeholder="required by backend"/></div>
+      </div>
+      <div class="ap-edit-actions">
+        <button class="ap-btn ap-btn--ghost" (click)="cancelEdit()">Cancel</button>
+        <button class="ap-btn ap-btn--accent" (click)="saveProfile()" [disabled]="saving">
+          {{ saving ? 'Saving…' : 'Save Changes' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ap-grid">
+    <div class="ap-card ap-card--wide">
+      <div class="ap-panel-head">
+        <div class="ap-panel-ico ap-pic--purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
+        <div><h3>Account Info</h3><p>Your admin account details</p></div>
+      </div>
+      <div class="ap-info-list">
+        <div class="ap-info-row"><span class="ap-info-lbl">Full Name</span><span class="ap-info-val">{{ user?.name }}</span></div>
+        <div class="ap-info-row"><span class="ap-info-lbl">Email</span><span class="ap-info-val">{{ user?.email }}</span></div>
+        <div class="ap-info-row"><span class="ap-info-lbl">Role</span>
+          <span class="ap-info-val"><span class="ap-role-badge">Administrator</span></span></div>
+        <div class="ap-info-row"><span class="ap-info-lbl">Member Since</span><span class="ap-info-val">{{ getJoinDate() }}</span></div>
+        <div class="ap-info-row"><span class="ap-info-lbl">Status</span>
+          <span class="ap-info-val ap-status-active">● Active</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,134 @@
+<div class="admin-shell" [class.sidebar-collapsed]="!sidebarOpen" [class.dark]="isDark">
+
+  <!-- ══ SIDEBAR (always dark) ══ -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <a class="brand" routerLink="/admin">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="brand-name">Edu<span>Boost</span></span>
+      </a>
+      <button class="collapse-btn" (click)="toggleSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="user-mini">
+      <div class="av-sm">{{ userAvatar }}</div>
+      <div class="user-mini-info">
+        <div class="um-name">{{ userName }}</div>
+        <div class="um-role">Administrator</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main</div>
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span>
+        <span class="nav-text">Dashboard</span>
+      </a>
+
+      <div class="nav-label">Management</div>
+      <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <span class="nav-text">Users</span>
+      </a>
+      <a routerLink="/admin/courses" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <span class="nav-text">Courses</span>
+      </a>
+
+      <a routerLink="/admin/feedback" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="nav-text">Feedback</span>
+      </a>
+
+      <div class="nav-label">Account</div>
+      
+      <a class="nav-item nav-logout" (click)="logout()">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+        <span class="nav-text">Logout</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-bottom-text">© 2025 EduBoost v2.0</div>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN PANEL ══ -->
+  <div class="main-panel">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" (click)="toggleSidebar()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <button class="back-btn" (click)="goBack()" title="Go back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <nav class="breadcrumb">
+          <ng-container *ngFor="let b of breadcrumbs; let last = last">
+            <a *ngIf="b.link && !last" [routerLink]="b.link" class="bc-link">{{ b.label }}</a>
+            <span *ngIf="!b.link || last" class="bc-current">{{ b.label }}</span>
+            <span *ngIf="!last" class="bc-sep"> / </span>
+          </ng-container>
+        </nav>
+      </div>
+
+      <div class="topbar-right">
+
+        <!-- 🌙 Theme Toggle -->
+        <button class="theme-btn" (click)="toggleTheme()" [title]="isDark ? 'Switch to Light' : 'Switch to Dark'">
+          <!-- Sun (show in dark mode) -->
+          <svg *ngIf="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <!-- Moon (show in light mode) -->
+          <svg *ngIf="!isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <!-- 👤 Profile -->
+        <div class="topbar-action" (click)="toggleProfileMenu($event)">
+          <div class="profile-trigger">
+            <div class="av-circle">{{ userAvatar }}</div>
+            <div class="pt-info">
+              <span class="pt-hi">Hi,</span>
+              <span class="pt-name">{{ userName }}</span>
+            </div>
+            <svg class="pt-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <div class="dropdown profile-dropdown" [class.open]="profileMenuOpen" (click)="$event.stopPropagation()">
+            <div class="prof-header">
+              <div class="av-lg">{{ userAvatar }}</div>
+              <div>
+                <div class="prof-name">{{ userName }}</div>
+                <div class="prof-email">{{ userEmail }}</div>
+                <span class="role-chip">Administrator</span>
+              </div>
+            </div>
+            <div style="padding: 5px 0">
+              <button class="dd-item" (click)="goToProfile()">
+                <div class="dd-item-icon ddi-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                My Profile
+              </button>
+              <div class="dd-divider"></div>
+              <button class="dd-item dd-logout" (click)="logout()">
+                <div class="dd-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="admin-footer">© 2025 EduBoost — Built for learners</footer>
+  </div>
+</div>

@@ -1,0 +1,662 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Page Layout */
+.register-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Empêche le scroll de la page entière */
+}
+
+/* Image Side with Heroic Design */
+.register-image {
+  flex: 1.2;
+  position: relative;
+  background: 
+    linear-gradient(135deg, rgba(25, 78, 4, 0.534) 0%, rgba(25, 78, 4, 0.534) 100%),
+    url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  height: 100vh; /* Assure que l'image prend toute la hauteur */
+}
+
+.register-image::before {
+  content: '';
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.image-content {
+  position: relative;
+  z-index: 2;
+  color: white;
+  padding: 30px;
+  max-width: 500px;
+  animation: fadeInUp 1s ease;
+  margin: 0 auto;
+}
+
+.image-content h1 {
+  font-size: clamp(2rem, 4vw, 3.5rem); /* Taille responsive */
+  font-weight: 700;
+  margin-bottom: 15px;
+  line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  animation: slideInLeft 1s ease;
+}
+
+.image-content p {
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  margin-bottom: 30px;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideInRight 1s ease;
+  animation-fill-mode: both;
+}
+
+.feature:nth-child(1) { animation-delay: 0.2s; }
+.feature:nth-child(2) { animation-delay: 0.4s; }
+.feature:nth-child(3) { animation-delay: 0.6s; }
+
+.feature-icon {
+  width: 35px;
+  height: 35px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  backdrop-filter: blur(5px);
+  flex-shrink: 0; /* Empêche l'icône de rétrécir */
+}
+
+.feature span:last-child {
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
+}
+
+/* Form Side */
+.register-form {
+  flex: 0.8;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Changé de center à flex-start */
+  padding: 30px 40px;
+  background: #fff;
+  overflow-y: auto; /* Permet le scroll si nécessaire */
+  position: relative;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+  height: 100vh; /* Prend toute la hauteur */
+  scrollbar-width: thin; /* Pour Firefox */
+  scrollbar-color: rgba(25, 78, 4, 0.534) #f0f0f0; /* Pour Firefox */
+}
+
+/* Style de la scrollbar pour Chrome/Safari */
+.register-form::-webkit-scrollbar {
+  width: 6px;
+}
+
+.register-form::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.register-form::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(25, 78, 4, 0.534), rgba(25, 78, 4, 0.534));
+  border-radius: 10px;
+}
+
+.form-header {
+  margin-bottom: 25px;
+  flex-shrink: 0; /* Empêche le header de rétrécir */
+}
+
+.register-form h2 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, rgba(25, 78, 4, 0.534) 0%, rgba(25, 78, 4, 0.534) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+.subtitle {
+  color: #666;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 18px;
+  position: relative;
+  flex-shrink: 0; /* Empêche les groupes de rétrécir */
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.form-group input:focus {
+  border-color: rgba(25, 78, 4, 0.534);;
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(106, 17, 203, 0.1);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.form-group.error input {
+  border-color: #ff4444;
+  background: #fff8f8;
+}
+
+/* Password Input */
+.password-input {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #666;
+  transition: all 0.3s ease;
+  padding: 5px;
+}
+
+.toggle-password:hover {
+  color: rgba(25, 78, 4, 0.534);
+}
+
+/* Password Strength */
+.password-strength {
+  height: 3px;
+  background: #e0e0e0;
+  border-radius: 2px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.strength-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4444, #ffbb33, #00C851);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+/* Error Message */
+.error-message {
+  color: #ff4444;
+  font-size: 0.75rem;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  animation: shake 0.5s ease;
+  line-height: 1.3;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+/* Checkbox Group */
+.checkbox-group {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #666;
+  cursor: pointer;
+  position: relative;
+}
+
+.checkbox-label input {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkbox-label a {
+  color: rgba(25, 78, 4, 0.534);
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap; /* Empêche la rupture du lien */
+}
+
+.checkbox-label a:hover {
+  text-decoration: underline;
+}
+
+/* Button */
+.signup-btn {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(25, 78, 4, 0.534) 0%, rgba(25, 78, 4, 0.534) 100%);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 15px;
+  flex-shrink: 0;
+}
+
+.signup-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.signup-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(106, 17, 203, 0.3);
+}
+
+.signup-btn:hover::before {
+  left: 100%;
+}
+
+.signup-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-icon {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.signup-btn:hover .btn-icon {
+  transform: translateX(5px);
+}
+
+/* Message */
+.message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-align: center;
+  background: #ffebee;
+  color: #c62828;
+  animation: slideInDown 0.5s ease;
+  flex-shrink: 0;
+}
+
+.message.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Social Login */
+.social-login {
+  margin-top: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.social-login p {
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.social-login p::before,
+.social-login p::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 25%;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.social-login p::before {
+  left: 0;
+}
+
+.social-login p::after {
+  right: 0;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.social-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f0f0f0;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+
+.social-btn.google:hover {
+  background: #DB4437;
+  color: white;
+}
+
+.social-btn.facebook:hover {
+  background: #4267B2;
+  color: white;
+}
+
+.social-btn.apple:hover {
+  background: #000;
+  color: white;
+}
+
+/* Sign in link */
+.signin-link {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  flex-shrink: 0;
+  padding-bottom: 10px; /* Espace en bas pour le scroll */
+}
+
+.signin-link a {
+  color: rgba(25, 78, 4, 0.534);;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+}
+
+.signin-link a:hover {
+  gap: 8px;
+  color: #2575fc;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+}
+
+.signin-link a:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading State */
+.signup-btn.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.signup-btn.loading .btn-text {
+  visibility: hidden;
+}
+
+.signup-btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .register-form {
+    padding: 25px 30px;
+  }
+  
+  .image-content {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .register-image {
+    flex: 1;
+  }
+  
+  .image-content h1 {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  }
+  
+  .register-form {
+    padding: 20px 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .register-image {
+    display: none;
+  }
+  
+  .register-form {
+    flex: 1;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .register-form h2 {
+    font-size: 2rem;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+  }
+  
+  .signup-btn {
+    padding: 12px;
+  }
+  
+  .checkbox-label {
+    font-size: 0.8rem;
+    flex-wrap: wrap; /* Permet au texte de passer à la ligne */
+  }
+  
+  .checkbox-label a {
+    white-space: normal; /* Permet la rupture des liens sur mobile */
+  }
+}
+
+/* Pour les très petits écrans */
+@media (max-width: 480px) {
+  .register-form {
+    padding: 15px;
+  }
+  
+  .register-form h2 {
+    font-size: 1.8rem;
+  }
+  
+  .form-group input {
+    font-size: 0.85rem;
+  }
+  
+  .social-icons {
+    gap: 8px;
+  }
+  
+  .social-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+  
+  .signin-link {
+    font-size: 0.85rem;
+  }
+}
+
+/* Pour les écrans très hauts */
+@media (min-height: 900px) {
+  .register-form {
+    justify-content: center; /* Centre le contenu sur les grands écrans */
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+}
+
+/* Pour les écrans très larges */
+@media (min-width: 1600px) {
+  .register-image {
+    flex: 1.5;
+  }
+  
+  .register-form {
+    flex: 0.7;
+    padding: 40px 60px;
+  }
+  
+  .image-content {
+    max-width: 600px;
+  }
+}

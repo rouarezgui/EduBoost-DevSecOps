@@ -1,0 +1,77 @@
+<div class="dash-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Welcome back, {{ userName }} </h1>
+      <p class="page-sub">Here's what's happening with your platform today.</p>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/admin/courses" class="btn-outline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        New Course
+      </a>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div *ngFor="let s of stats" class="stat-card" [ngClass]="'card-'+s.color">
+      <div class="stat-icon" [ngClass]="'icon-'+s.color">
+        <svg *ngIf="s.icon==='users'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <svg *ngIf="s.icon==='book'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <svg *ngIf="s.icon==='graduation'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        <svg *ngIf="s.icon==='chart'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ s.value }}</div>
+        <div class="stat-label">{{ s.label }}</div>
+        <div class="stat-sub">{{ s.sub }}</div>
+      </div>
+      <div class="stat-trend">{{ s.trend }}</div>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="card quick-actions">
+      <div class="card-header"><span>Quick Actions</span></div>
+      <div class="action-list">
+        <a routerLink="/admin/users" class="action-item">
+          <div class="action-icon ai-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div><div class="action-title">Manage Users</div><div class="action-sub">View and delete student accounts</div></div>
+          <svg class="action-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a routerLink="/admin/courses" class="action-item">
+          <div class="action-icon ai-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div><div class="action-title">Manage Courses</div><div class="action-sub">Create and publish content</div></div>
+          <svg class="action-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a routerLink="/admin/profile" class="action-item">
+          <div class="action-icon ai-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+          <div><div class="action-title">My Profile</div><div class="action-sub">Update admin profile</div></div>
+          <svg class="action-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="card users-summary">
+      <div class="card-header">
+        <span>Users</span>
+        <a routerLink="/admin/users" class="card-link">View all</a>
+      </div>
+      <div class="user-list" *ngIf="users.length; else noUsers">
+        <div class="user-row" *ngFor="let u of users">
+          <div class="u-av">{{ u.avatar }}</div>
+          <div class="u-info">
+            <div class="u-name">{{ u.name }}</div>
+            <div class="u-email">{{ u.email || 'No email' }}</div>
+          </div>
+          <div class="u-tags">
+            <span class="u-role-b" [ngClass]="u.role === 'admin' ? 'rb-admin' : 'rb-student'">{{ u.role }}</span>
+            <span class="u-status-b" [ngClass]="'status-'+u.approvalStatus">{{ u.approvalStatus }}</span>
+          </div>
+        </div>
+      </div>
+      <ng-template #noUsers>
+        <div class="empty-users">No users found.</div>
+      </ng-template>
+    </div>
+  </div>
+</div>

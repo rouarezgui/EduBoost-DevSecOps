@@ -1,0 +1,57 @@
+<div class="catalog-root">
+  <!-- Hero -->
+  <section class="catalog-hero">
+    <button class="back-fab" (click)="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="hero-content">
+      <div class="hero-tag">📚 Course Catalog</div>
+      <h1>Learn Without Limits</h1>
+      <p>Discover expertly curated courses designed to accelerate your career and skills.</p>
+    </div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input [(ngModel)]="searchTerm" placeholder="Search courses, topics, skills..." />
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="filters-bar">
+    <button *ngFor="let f of filters" class="filter-chip" [class.active]="activeFilter===f" (click)="setFilter(f)">{{ f }}</button>
+    <div class="results-count">{{ filteredCourses.length }} course{{ filteredCourses.length !== 1 ? 's':'' }}</div>
+  </section>
+
+  <!-- Grid -->
+  <section class="courses-section">
+    <div class="catalog-grid">
+      <article *ngFor="let c of filteredCourses; let i=index" class="catalog-card" [routerLink]="['/courses', c.id]" [style.animation-delay]="(i*60)+'ms'">
+        <div class="card-thumb" [style.background-image]="'url(https://picsum.photos/seed/course'+c.id+'/600/320)'">
+          <div class="thumb-overlay"></div>
+          <span class="level-tag" [ngClass]="levelClass(c.difficulty)">{{ c.difficulty || 'Beginner' }}</span>
+          <div class="thumb-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-cat">{{ c.category || 'General' }}</div>
+          <h3 class="card-title">{{ c.title }}</h3>
+          <p class="card-desc">{{ c.description || 'Explore this course to build practical skills and advance your knowledge.' }}</p>
+          <div class="card-stats">
+            <span class="stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>{{ c.chapters?.length || 0 }} chapters</span>
+            <span class="stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{{ c.duration || '—' }}</span>
+          </div>
+          <div class="card-footer">
+            <span class="open-badge">Open Course →</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="empty-state" *ngIf="!filteredCourses.length">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <h3>No courses found</h3>
+      <p>Try different search terms or filters</p>
+      <button (click)="clearFilters()">Clear filters</button>
+    </div>
+  </section>
+</div>

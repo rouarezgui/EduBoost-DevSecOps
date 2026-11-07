@@ -1,0 +1,14 @@
+<div class="list-group p-2">
+	<a class="list-group-item list-group-item-action" routerLink="/dashboard">Home</a>
+	<a class="list-group-item list-group-item-action" routerLink="/catalog">Courses</a>
+	<a class="list-group-item list-group-item-action" routerLink="/progress">Progress</a>
+
+	<!-- Logout shown above Settings for all users -->
+	<button class="list-group-item list-group-item-action btn-inline-logout" (click)="auth.logout()">Logout</button>
+
+	<a class="list-group-item list-group-item-action" routerLink="/settings">Settings</a>
+
+	<!-- Admin links -->
+	<a *ngIf="auth.getCurrentUser()?.role === 'admin'" class="list-group-item list-group-item-action" routerLink="/admin/users">Manage Users</a>
+	<a *ngIf="auth.getCurrentUser()?.role === 'admin'" class="list-group-item list-group-item-action" routerLink="/admin/courses">Manage Courses</a>
+</div>

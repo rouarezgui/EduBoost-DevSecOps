@@ -1,0 +1,167 @@
+<div class="register-page">
+  <!-- Image Side with Overlay Content -->
+  <div class="register-image">
+    <div class="image-content">
+      <h1>Join the Adventure</h1>
+      <p>Create your account and start your journey with us today!</p>
+      <div class="features">
+        <div class="feature">
+          <span class="feature-icon">✓</span>
+          <span>Exclusive access</span>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">✓</span>
+          <span>Personalized experience</span>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">✓</span>
+          <span>24/7 support</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Side -->
+  <div class="register-form">
+    <div class="form-header">
+      <h2>Create Account</h2>
+      <p class="subtitle">Fill in your details to get started</p>
+    </div>
+
+    <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+      <!-- Full Name - CORRIGÉ -->
+      <div class="form-group" [class.error]="name.invalid && (name.dirty || name.touched || submitted)">
+        <label>Username</label>
+        <input 
+          type="text"
+          [(ngModel)]="nameValue"  
+          name="name"
+          #name="ngModel"
+          placeholder="Enter your username"
+          required
+          minlength="3">
+        <div class="error-message" *ngIf="name.invalid && (name.dirty || name.touched || submitted)">
+          <span *ngIf="name.errors?.['required']">Username is required</span>
+          <span *ngIf="name.errors?.['minlength']">Minimum 3 characters required</span>
+        </div>
+      </div>
+
+      <!-- Email - CORRIGÉ -->
+      <div class="form-group" [class.error]="email.invalid && (email.dirty || email.touched || submitted)">
+        <label>Email </label>
+        <input 
+          type="email"
+          [(ngModel)]="emailValue"  
+          name="email"
+          #email="ngModel"
+          placeholder="Enter your email"
+          required
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+        <div class="error-message" *ngIf="email.invalid && (email.dirty || email.touched || submitted)">
+          <span *ngIf="email.errors?.['required']">Email is required</span>
+          <span *ngIf="email.errors?.['pattern']">Please enter a valid email</span>
+        </div>
+      </div>
+
+      <!-- Phone - CORRIGÉ 
+      <div class="form-group" [class.error]="phone.invalid && (phone.dirty || phone.touched || submitted)">
+        <label>Phone Number</label>
+        <input 
+          type="tel"
+          [(ngModel)]="phoneValue"  
+          name="phone"
+          #phone="ngModel"
+          placeholder="Enter your phone number"
+          required
+          pattern="[0-9]{10,15}">
+        <div class="error-message" *ngIf="phone.invalid && (phone.dirty || phone.touched || submitted)">
+          <span *ngIf="phone.errors?.['required']">Phone number is required</span>
+          <span *ngIf="phone.errors?.['pattern']">Enter valid phone number (10-15 digits)</span>
+        </div>
+      </div>-->
+
+      <!-- Password -->
+      <div class="form-group" [class.error]="password.invalid && (password.dirty || password.touched || submitted)">
+        <label>Password</label>
+        <div class="password-input">
+          <input 
+            [type]="showPassword ? 'text' : 'password'"
+            [(ngModel)]="passwordValue"
+            name="password"
+            #password="ngModel"
+            placeholder="Create a password"
+            required
+            minlength="6">
+          <button type="button" class="toggle-password" (click)="showPassword = !showPassword">
+            {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+        <div class="error-message" *ngIf="password.invalid && (password.dirty || password.touched || submitted)">
+          <span *ngIf="password.errors?.['required']">Password is required</span>
+          <span *ngIf="password.errors?.['minlength']">Minimum 6 characters required</span>
+        </div>
+        <div class="password-strength" *ngIf="passwordValue">
+          <div class="strength-bar" [style.width.%]="getPasswordStrength()"></div>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group" [class.error]="(confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched || submitted)) || (passwordValue && confirmPasswordValue && passwordValue !== confirmPasswordValue)">
+        <label>Confirm Password</label>
+        <input 
+          type="password"
+          [(ngModel)]="confirmPasswordValue"
+          name="confirmPassword"
+          #confirmPassword="ngModel"
+          placeholder="Re-enter your password"
+          required>
+        <div class="error-message" *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched || submitted)">
+          <span *ngIf="confirmPassword.errors?.['required']">Please confirm your password</span>
+        </div>
+        <div class="error-message" *ngIf="passwordValue && confirmPasswordValue && passwordValue !== confirmPasswordValue">
+          <span>Passwords do not match</span>
+        </div>
+      </div>
+
+      <!-- Terms & Conditions -->
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input 
+             type="checkbox"
+             [(ngModel)]="agreeTerms"
+             name="agreeTerms"
+             #agreeTermsModel="ngModel"
+             required>
+          <span class="checkmark"></span>
+          I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        </label>
+        <div class="error-message" *ngIf="!agreeTermsModel.valid && submitted">
+          You must agree to the terms
+        </div>
+      </div>
+
+      <button type="submit" class="signup-btn" [disabled]="loading">
+        <span class="btn-text">{{ loading ? 'Création...' : 'Create Account' }}</span>
+        <span class="btn-icon" *ngIf="!loading">→</span>
+      </button>
+    </form>
+
+    <p *ngIf="message" class="message" [class.success]="message.includes('réussie') || message.includes('✅')">
+      {{ message }}
+    </p>
+
+    <div class="social-login">
+      <p>Or sign up with</p>
+      <div class="social-icons">
+        <button class="social-btn google">G</button>
+        <button class="social-btn facebook">f</button>
+        <button class="social-btn apple"></button>
+      </div>
+    </div>
+
+    <div class="signin-link">
+      Already have an account?
+      <a (click)="goToLogin()">Sign in <span class="arrow">→</span></a>
+    </div>
+  </div>
+</div>
